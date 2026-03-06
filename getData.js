@@ -9,7 +9,8 @@ async function getData() {
     })
 
     try {
-
+        const products = await db.all(`SELECT * FROM products`)
+        console.log(products)
     } catch (error) {
         console.log(error)
     }
