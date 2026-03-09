@@ -9,7 +9,10 @@ async function getData() {
     })
 
     try {
-        const products = await db.all(`SELECT * FROM products`)
+        const query = 'SELECT * FROM products WHERE genre = ?'
+        const params = ['rock']
+
+        const products = await db.all(query, params)
         console.log(products)
     } catch (error) {
         console.log(error)
