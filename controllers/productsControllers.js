@@ -12,6 +12,11 @@ export async function getGenres(req, res) {
     }
 }
 
-export async function getProducts() {
-    console.log('products')
+export async function getProducts(req, res) {
+    try {
+        const db = await getDBConnection()
+
+    } catch (error) {
+        res.status(500).json({error: 'Failed to fetch products', details: error.message})
+    }
 }
