@@ -16,6 +16,10 @@ export async function getProducts(req, res) {
     try {
         const db = await getDBConnection()
 
+        let query = 'SELECT * FROM products'
+        const products = await db.all(query)
+        res.json(products)
+
     } catch (error) {
         res.status(500).json({error: 'Failed to fetch products', details: error.message})
     }
