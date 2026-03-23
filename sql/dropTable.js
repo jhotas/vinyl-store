@@ -1,20 +1,14 @@
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
-import path from 'node:path'
+import { getDBConnection } from '../db/db.js'
 
 async function dropTable() {
+    const db = await getDBConnection()
 
-      const db = await open({
-            filename: path.join('database.db'),
-            driver: sqlite3.Database
-      })
+    await db.exec(`
+        DROP TABLE IF EXISTS users;
+        `)
 
-      await db.exec(`
-            DROP TABLE IF EXISTS users;
-            `)
-
-      await db.close()
-      console.log('table dropped')
+    await db.close()
+    console.log('Table dropped.')
 }
 
-dropTable() 
+dropTable()
