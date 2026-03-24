@@ -5,6 +5,7 @@ import { authRouter } from './routes/auth.js'
 const app = express()
 const PORT = 8000
  
+app.use(express.json())
 app.use(express.static('public'))
 
 app.use('/api/products', productsRouter)
