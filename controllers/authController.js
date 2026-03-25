@@ -1,4 +1,5 @@
 import validator from 'validator'
+import { getDBConnection } from '../db/db.js'
 
 export async function registerUser(req, res) {
     let { name, email, username, password } = req.body
@@ -19,5 +20,10 @@ export async function registerUser(req, res) {
         return res.status(400).json({ error: 'Invalid email format' })
     }
 
-    console.log(req.body)
+    try {
+        const db = await getDBConnection()
+    } catch (error) {
+        console.error('Registration error: ', error.message)
+        res.status(500).json({ error: 'Registration failed. Please try again.' })
+    }
 }
