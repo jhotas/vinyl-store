@@ -22,6 +22,27 @@ export async function registerUser(req, res) {
 
     try {
         const db = await getDBConnection()
+
+        const existingUser = await db.get(
+            'SELECT username, email FROM users WHERE username = ? OR email = ?',
+            [username, email]
+        )
+
+        if (existingUser) {
+            if (existingUser.username === username) {
+                return res.status(409).json({ error: 'Username already taken.' })
+            }
+            if (existingUser.email === email) {
+                return res.status(409).json({ error: 'Email already registered.' })
+            }
+        }
+
+        await db.run(
+            'INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)',
+            [name, email, username, password]
+        )
+
+        return res.status(201).json({ message: 'User registered successfully.' })
     } catch (error) {
         console.error('Registration error: ', error.message)
         res.status(500).json({ error: 'Registration failed. Please try again.' })
