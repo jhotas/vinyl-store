@@ -1,4 +1,5 @@
 import validator from 'validator'
+import bcrypt from 'bcryptjs'
 import { getDBConnection } from '../db/db.js'
 
 export async function registerUser(req, res) {
@@ -22,12 +23,12 @@ export async function registerUser(req, res) {
 
     try {
         const db = await getDBConnection()
-
+        
         const existingUser = await db.get(
             'SELECT username, email FROM users WHERE username = ? OR email = ?',
             [username, email]
         )
-
+        
         if (existingUser) {
             if (existingUser.username === username) {
                 return res.status(409).json({ error: 'Username already taken.' })
@@ -36,10 +37,12 @@ export async function registerUser(req, res) {
                 return res.status(409).json({ error: 'Email already registered.' })
             }
         }
-
+        
+        const hashedPassword = await bcrypt.hash(password, 10)
+        
         await db.run(
             'INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)',
-            [name, email, username, password]
+            [name, email, username, hashedPassword]
         )
 
         return res.status(201).json({ message: 'User registered successfully.' })
