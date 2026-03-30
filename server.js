@@ -1,7 +1,10 @@
 import express from 'express'
 import session from 'express-session'
+import dotenv from 'dotenv'
 import { productsRouter } from './routes/products.js'
 import { authRouter } from './routes/auth.js'
+
+dotenv.config()
 
 const app = express()
 const PORT = 8000
